@@ -1,13 +1,16 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useState } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 
 import { Menu, Divider, Avatar, IconButton, Text } from 'react-native-paper';
 import colors from '../constants/colors';
+import { useNavigation } from '@react-navigation/native';
 
 const STATUS_BAR_HEIGHT = StatusBar.currentHeight;
 const lastSeen = '12-10-2020 12:10pm';
 const Header = () => {
   const [visible, setVisible] = useState(false);
+  const navigation = useNavigation();
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
 
@@ -37,7 +40,14 @@ const Header = () => {
             <Menu.Item leadingIcon="delete-alert-outline" title="Delete all" />
             <Menu.Item leadingIcon="export" title="Export" />
             <Divider />
-            <Menu.Item leadingIcon="details" title="Details" />
+            <Menu.Item
+              onPress={() => {
+                closeMenu();
+                navigation.navigate('current-location');
+              }}
+              leadingIcon="location-enter"
+              title="Location"
+            />
           </Menu>
         </View>
       </View>
