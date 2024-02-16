@@ -3,19 +3,19 @@ import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import colors from '../constants/colors';
 
-const Msg = ({ msg = '', left = false }) => {
+const Msg = ({ msg = '', myMessage = false }) => {
   return (
     <>
       <View
         style={[
           { ...styles.con },
-          left ? { ...styles.left } : { ...styles.right },
+          myMessage ? { ...styles.right } : { ...styles.left },
         ]}>
         <Text
           variant="bodyMedium"
           style={[
             { ...styles.text },
-            left ? { ...styles.leftText } : { ...styles.rightText },
+            myMessage ? { ...styles.rightText } : { ...styles.leftText },
           ]}>
           {msg}
         </Text>

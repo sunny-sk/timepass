@@ -1,0 +1,1 @@
+https://github.com/atlanteh/react-native-slot-machine

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "854723128103",
+    "project_id": "timepass-5b0cc",
+    "storage_bucket": "timepass-5b0cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:854723128103:android:074954c85ad94e27b39702",
+        "android_client_info": {
+          "package_name": "com.timepass.timepass"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "854723128103-1knoce8fae999kt3d925jb79fmcnmo4u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.timepass.timepass",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "854723128103-rb2mn396q3drup9ed68fq18pg24lbg4n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVLijEjEERc4bsLRmxHzBQ2gat1x9509M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "854723128103-nrhcav5nr8egjifgel7s4ei2lpgtjnbm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

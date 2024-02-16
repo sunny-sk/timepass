@@ -4,7 +4,7 @@ import {
   PaperProvider,
   MD3LightTheme as DefaultTheme,
 } from 'react-native-paper';
-
+import AuthProvider from './src/context/auth-context';
 const theme = {
   ...DefaultTheme,
   // Specify custom property
@@ -19,7 +19,9 @@ const theme = {
 function App() {
   return (
     <PaperProvider theme={theme}>
-      <Navigation />
+      <AuthProvider>
+        <Navigation />
+      </AuthProvider>
     </PaperProvider>
   );
 }

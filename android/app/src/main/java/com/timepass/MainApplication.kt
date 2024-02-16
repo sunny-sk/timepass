@@ -1,4 +1,4 @@
-package com.timepass
+package com.timepass.timepass
 
 import android.app.Application
 import com.facebook.react.PackageList
@@ -12,8 +12,9 @@ import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.flipper.ReactNativeFlipper
 import com.facebook.soloader.SoLoader
 import com.oblador.vectoricons.VectorIconsPackage;
+import androidx.multidex.MultiDexApplication;
 
-class MainApplication : Application(), ReactApplication {
+class MainApplication : MultiDexApplication(), ReactApplication {
 
   override val reactNativeHost: ReactNativeHost =
       object : DefaultReactNativeHost(this) {

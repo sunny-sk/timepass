@@ -4,51 +4,68 @@ import { StatusBar, StyleSheet, View } from 'react-native';
 
 import { Menu, Divider, Avatar, IconButton, Text } from 'react-native-paper';
 import colors from '../constants/colors';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useAuth } from '../hooks';
+import { deleteAllMessagesFB } from '../utils/api';
+
+type Props = {
+  lastSeen: string[];
+};
 
 const STATUS_BAR_HEIGHT = StatusBar.currentHeight;
-const lastSeen = '12-10-2020 12:10pm';
-const Header = () => {
+
+const Header = ({ lastSeen }: Props) => {
+  const route = useRoute();
   const [visible, setVisible] = useState(false);
   const navigation = useNavigation();
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
+  const { authData } = useAuth();
 
   return (
     <View style={styles.headerCon}>
       <View style={styles.headerInnerCon}>
         <View style={styles.headerInnerLeft}>
-          <Avatar.Text size={35} label="XD" />
+          <Avatar.Text size={35} label={lastSeen[0]?.[0]?.toUpperCase()} />
           {/* <Text style={styles.usernameText}>sunny</Text> */}
           <View style={styles.lastSeenCon}>
             <Text textBreakStrategy="simple" variant="bodySmall">
-              Last seen : {lastSeen}
+              Last seen : {new Date(lastSeen[1]).toLocaleString()}
             </Text>
           </View>
         </View>
         <View style={styles.headerInnerRight}>
-          <Menu
-            contentStyle={{
-              marginTop: STATUS_BAR_HEIGHT,
-              backgroundColor: '#fff',
-            }}
-            visible={visible}
-            onDismiss={closeMenu}
-            anchor={
-              <IconButton onPress={openMenu} icon="dots-vertical" size={24} />
-            }>
-            <Menu.Item leadingIcon="delete-alert-outline" title="Delete all" />
-            <Menu.Item leadingIcon="export" title="Export" />
-            <Divider />
-            <Menu.Item
-              onPress={() => {
-                closeMenu();
-                navigation.navigate('current-location');
+          {authData.role === 'admin' && (
+            <Menu
+              contentStyle={{
+                marginTop: STATUS_BAR_HEIGHT,
+                backgroundColor: '#fff',
               }}
-              leadingIcon="location-enter"
-              title="Location"
-            />
-          </Menu>
+              visible={visible}
+              onDismiss={closeMenu}
+              anchor={
+                <IconButton onPress={openMenu} icon="dots-vertical" size={24} />
+              }>
+              <Menu.Item
+                onPress={() => {
+                  deleteAllMessagesFB(route.params?.channelName).finally(
+                    closeMenu,
+                  );
+                }}
+                leadingIcon="delete-alert-outline"
+                title="Delete all"
+              />
+              <Divider />
+              <Menu.Item
+                onPress={() => {
+                  closeMenu();
+                  navigation.navigate('current-location');
+                }}
+                leadingIcon="location-enter"
+                title="Location"
+              />
+            </Menu>
+          )}
         </View>
       </View>
     </View>
@@ -101,6 +118,7 @@ const styles = StyleSheet.create({
   },
   headerInnerRight: {
     alignItems: 'flex-end',
+    height: 52,
     position: 'relative',
   },
 });
