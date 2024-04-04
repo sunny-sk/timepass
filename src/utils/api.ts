@@ -5,6 +5,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uniqid from 'react-native-uuid';
 const LOCAL_AUTH_KEY = 'user_login';
+import messaging from '@react-native-firebase/messaging';
 export const showToast = (message: string) => {
   ToastAndroid.showWithGravity(
     message,
@@ -40,6 +41,8 @@ export const registerUser = async () => {
     // Create a Google credential with the token
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
+    const pushNotificationToken = await messaging().getToken();
+
     // Sign-in the user with the credential
     let { user } = await auth().signInWithCredential(googleCredential);
     // email got in Oauth
@@ -55,6 +58,7 @@ export const registerUser = async () => {
           secret: '' + googleCredential.secret,
           photo: '' + user.photoURL,
           lastLogin: new Date(),
+          pushNotificationToken,
         };
         firestore()
           .collection('Users')
@@ -72,7 +76,7 @@ export const registerUser = async () => {
           photo: '' + user.photoURL,
           alloNotification: false,
           lastLogin: new Date(),
-          pushNotificationToken: '',
+          pushNotificationToken,
           role: 'user',
           email: user.email,
           location: {
@@ -106,6 +110,23 @@ export const updateLastSeenFB = async () => {
   } else {
     firestore().collection('Users').doc(data.docs[0].id).update({
       lastSeen: new Date(),
+    });
+  }
+};
+export const updatePushNotiToken = async (pushNotificationToken: string) => {
+  if (!pushNotificationToken) {
+    return;
+  }
+  let { email } = auth().currentUser!;
+  const data = await firestore()
+    .collection('Users')
+    .where('email', '==', email)
+    .get();
+  if (data.size === 0) {
+    return null;
+  } else {
+    firestore().collection('Users').doc(data.docs[0].id).update({
+      pushNotificationToken: new Date(),
     });
   }
 };

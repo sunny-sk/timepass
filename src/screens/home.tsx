@@ -2,7 +2,7 @@ import { StatusBar, StyleSheet, View, Dimensions } from 'react-native';
 import React, { useEffect } from 'react';
 import colors from '../constants/colors';
 const STATUS_BAR_HEIGHT = StatusBar.currentHeight;
-
+import messaging from '@react-native-firebase/messaging';
 import LinearGradient from 'react-native-linear-gradient';
 import { Text, Button } from 'react-native-paper';
 const WIDTH = Dimensions.get('screen').width;
@@ -21,8 +21,18 @@ const Home = (_props: Props) => {
   function onGoogleButtonPress() {
     registerUser();
   }
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  }
 
   useEffect(() => {
+    requestUserPermission();
     GoogleSignin.configure({
       webClientId:
         '854723128103-rb2mn396q3drup9ed68fq18pg24lbg4n.apps.googleusercontent.com',
@@ -30,13 +40,13 @@ const Home = (_props: Props) => {
     });
   }, []);
 
+  // // Register background handler
+  // messaging().setBackgroundMessageHandler(async remoteMessage => {
+  //   console.log('Message handled in the background!', remoteMessage);
+  // });
+
   return (
     <View style={[styles.screen, { backgroundColor: '#363738' }]}>
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor={colors.white}
-        translucent={true}
-      />
 
       <View style={styles.header}>
         <View style={styles.badge}>
@@ -147,8 +157,7 @@ const Home = (_props: Props) => {
         <Button
           mode="elevated"
           contentStyle={{ padding: 5 }}
-          style={{ width: 200 }}
-        >
+          style={{ width: 200 }}>
           Spin
         </Button>
         {!authData && (
@@ -184,6 +193,7 @@ const Home = (_props: Props) => {
               onPress={logout}>
               Logout
             </Button>
+
           </>
         )}
       </View>
